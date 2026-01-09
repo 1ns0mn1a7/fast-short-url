@@ -52,3 +52,16 @@ class URLShortenerService:
             return None
 
         return {"clicks": link.clicks}
+
+    def cleanup_expired_links(self) -> int:
+        deleted = (
+            self.db.query(ShortLink)
+            .filter(
+                ShortLink.expires_at.is_not(None),
+                ShortLink.expires_at < datetime.utcnow(),
+            )
+            .delete(synchronize_session=False)
+        )
+
+        self.db.commit()
+        return deleted
