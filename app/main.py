@@ -1,13 +1,17 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.responses import RedirectResponse
+from sqlalchemy.orm import Session
 
 from app.schemas import ShortenRequest, ShortenResponse
+from app.db import get_db
 from app.services import URLShortenerService
+
 
 app = FastAPI()
 
-url_storage = {}
-service = URLShortenerService(url_storage)
+
+def get_service(db: Session = Depends(get_db)):
+    return URLShortenerService(db)
 
 
 @app.get("/health")
@@ -16,13 +20,19 @@ def health_check() -> dict:
 
 
 @app.post("/shorten", response_model=ShortenResponse)
-def shorten_url(request: ShortenRequest) -> dict:
+def shorten_url(
+    request: ShortenRequest,
+    service: URLShortenerService = Depends(get_service),
+):
     code = service.create_short_url(str(request.url))
     return {"short_url": code}
 
 
 @app.get("/{code}")
-def redirect(code: str):
+def redirect(
+    code: str,
+    service: URLShortenerService = Depends(get_service),
+):
     original_url = service.get_original_url(code)
 
     if not original_url:
@@ -32,7 +42,10 @@ def redirect(code: str):
 
 
 @app.get("/{code}/stats")
-def stats(code: str):
+def stats(
+    code: str,
+    service: URLShortenerService = Depends(get_service),
+):
     stats = service.get_stats(code)
 
     if not stats:
