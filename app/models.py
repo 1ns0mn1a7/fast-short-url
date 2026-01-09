@@ -1,4 +1,5 @@
-from sqlalchemy import Integer, String
+from datetime import datetime
+from sqlalchemy import Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
@@ -11,3 +12,4 @@ class ShortLink(Base):
     code: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
     url: Mapped[str] = mapped_column(nullable=False)
     clicks: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
