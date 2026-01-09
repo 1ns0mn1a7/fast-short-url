@@ -29,3 +29,13 @@ def redirect(code: str):
         raise HTTPException(status_code=404, detail="Short link not found")
 
     return RedirectResponse(original_url)
+
+
+@app.get("/{code}/stats")
+def stats(code: str):
+    stats = service.get_stats(code)
+
+    if not stats:
+        raise HTTPException(status_code=404, detail="Short link not found")
+
+    return {"code": code, **stats}

@@ -21,3 +21,10 @@ class URLShortenerService:
 
         link["clicks"] += 1
         return link["url"]
+
+    def get_stats(self, code: str) -> dict | None:
+        link = self.storage.get(code)
+        if not link:
+            return None
+
+        return {"clicks": link["clicks"]}
