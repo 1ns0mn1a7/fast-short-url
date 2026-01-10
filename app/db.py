@@ -2,17 +2,24 @@ from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
 
-DATABASE_URL = "postgresql://admin@localhost:5432/url_shortener"
+from app.config import settings
 
 
 class Base(DeclarativeBase):
     pass
 
 
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(
+    settings.database_url,
+    echo=settings.debug,
+    pool_pre_ping=True,
+)
 
-SessionLocal = sessionmaker(bind=engine)
-
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
+)
 
 def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()

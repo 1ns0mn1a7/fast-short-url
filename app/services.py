@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -12,7 +12,7 @@ class URLShortenerService:
         self.db = db
 
     def create_short_url(self, original_url: str, ttl_hours: int = 24) -> str:
-        expires_at = datetime.utcnow() + timedelta(hours=ttl_hours)
+        expires_at = datetime.now(UTC) + timedelta(hours=ttl_hours)
 
         while True:
             code = generate_short_url()
@@ -34,7 +34,7 @@ class URLShortenerService:
         if not link:
             return None
 
-        if link.expires_at and link.expires_at < datetime.utcnow():
+        if link.expires_at and link.expires_at < datetime.now(UTC):
             return None
 
         link.clicks += 1
@@ -48,7 +48,7 @@ class URLShortenerService:
         if not link:
             return None
 
-        if link.expires_at and link.expires_at < datetime.utcnow():
+        if link.expires_at and link.expires_at < datetime.now(UTC):
             return None
 
         return {"clicks": link.clicks}
@@ -58,7 +58,7 @@ class URLShortenerService:
             self.db.query(ShortLink)
             .filter(
                 ShortLink.expires_at.is_not(None),
-                ShortLink.expires_at < datetime.utcnow(),
+                ShortLink.expires_at < datetime.now(UTC),
             )
             .delete(synchronize_session=False)
         )

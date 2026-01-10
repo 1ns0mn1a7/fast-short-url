@@ -2,12 +2,16 @@ from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.schemas import ShortenRequest, ShortenResponse
 from app.db import get_db
 from app.services import URLShortenerService
 
 
-app = FastAPI()
+app = FastAPI(
+    title=settings.app_name,
+    debug=settings.debug,
+)
 
 
 def get_service(db: Session = Depends(get_db)):
@@ -25,7 +29,10 @@ def shorten_url(
     background_tasks: BackgroundTasks,
     service: URLShortenerService = Depends(get_service),
 ):
-    code = service.create_short_url(str(request.url))
+    code = service.create_short_url(
+        str(request.url),
+        ttl_hours=settings.default_ttl_hours,
+    )
 
     background_tasks.add_task(service.cleanup_expired_links)
 

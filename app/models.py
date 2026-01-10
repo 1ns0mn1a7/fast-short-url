@@ -10,6 +10,6 @@ class ShortLink(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     code: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
-    url: Mapped[str] = mapped_column(nullable=False)
+    url: Mapped[str] = mapped_column(String, nullable=False)
     clicks: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
