@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
@@ -22,9 +22,13 @@ def health_check() -> dict:
 @app.post("/shorten", response_model=ShortenResponse)
 def shorten_url(
     request: ShortenRequest,
+    background_tasks: BackgroundTasks,
     service: URLShortenerService = Depends(get_service),
 ):
     code = service.create_short_url(str(request.url))
+
+    background_tasks.add_task(service.cleanup_expired_links)
+
     return {"short_url": code}
 
 
