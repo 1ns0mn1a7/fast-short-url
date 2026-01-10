@@ -24,15 +24,24 @@
 
 ## 📦 Установка
 
+### Клонируем репозиторий
 ```bash
 git clone https://github.com/1ns0mn1a7/fast-short-url.git
 cd fast-short-url
-
-python -m venv .venv
-source .venv/bin/activate
-
-pip install -r requirements.txt
 ```
+
+### Создаём виртуальное окружение через uv
+```bash
+uv venv
+source .venv/bin/activate
+```
+
+### Устанавливаем зависимости
+```bash
+uv pip install .[dev]
+```
+Все зависимости берутся из `pyproject.toml`
+`dev` включает тесты, линтер и dev-инструменты
 
 ## ⚙️ Конфигурация
 
