@@ -25,14 +25,8 @@ const browserGlobals = {
 };
 
 export default [
-  // --------------------
-  // Base JS
-  // --------------------
   js.configs.recommended,
 
-  // --------------------
-  // Vue SFC
-  // --------------------
   {
     files: ["**/*.vue"],
     languageOptions: {
@@ -58,9 +52,6 @@ export default [
     },
   },
 
-  // --------------------
-  // TypeScript
-  // --------------------
   {
     files: ["**/*.ts"],
     languageOptions: {
@@ -84,9 +75,6 @@ export default [
     },
   },
 
-  // --------------------
-  // Node (configs)
-  // --------------------
   {
     files: ["vite.config.ts", "eslint.config.js"],
     languageOptions: {
@@ -97,8 +85,5 @@ export default [
     },
   },
 
-  // --------------------
-  // Prettier (ВСЕГДА ПОСЛЕДНИЙ)
-  // --------------------
   prettier,
 ];
