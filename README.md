@@ -125,11 +125,18 @@ service.cleanup_expired_links()
 ```
 
 
-# 🖥 Frontend (Terminal UI)
+# 🖥 Frontend WEB (Terminal UI Styled)
 
-Frontend - это терминальный веб-интерфейс, вдохновлённый DOS/CLI, предназначенный для работы с API сервиса прямо из браузера.
+<p align="center">
+  <img
+    src="./screenshot.png"
+    alt="Terminal UI screenshot"
+    width="900"
+    style="border-radius: 12px; border: 1px solid #2a2a2a;"
+  />
+</p>
 
-А аккуратный terminal-style Web UI, где всё управляется командами.
+Frontend - это terminal style Web UI, где всё управляется командами.
 
 ## 🎮 Возможности
 
